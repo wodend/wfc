@@ -1,0 +1,38 @@
+{
+    "size": 10,
+    "extension": "png",
+    "graphics": [
+        {
+            "name": "corner",
+            "rotation_count": 3,
+            "left": 0,
+            "right": 1,
+            "up": 1,
+            "down": 0
+        },
+        {
+            "name": "cross",
+            "rotation_count": 1,
+            "left": 1,
+            "right": 1,
+            "up": 1,
+            "down": 1
+        },
+        {
+            "name": "empty",
+            "rotation_count": 0,
+            "left": 0,
+            "right": 0,
+            "up": 0,
+            "down": 0
+        },
+        {
+            "name": "line",
+            "rotation_count": 1,
+            "left": 1,
+            "right": 1,
+            "up": 0,
+            "down": 0
+        }
+    ]
+}
