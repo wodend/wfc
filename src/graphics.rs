@@ -5,7 +5,7 @@ use serde::Deserialize;
 use image::{DynamicImage, GenericImage};
 use crate::wave::Wave;
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Direction {
     Left,
     Right,

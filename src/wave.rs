@@ -13,8 +13,31 @@ pub struct Wave {
     observed_count: usize,
     rng: ThreadRng,
     connectors: HashMap<Direction, Vec<usize>>,
+    neighbors: Vec<Vec<(Direction, usize)>>, // [slot]
     states: Vec<Vec<bool>>, // [slot][tile]
     entropies: Vec<f32>, // [slot] TODO: Store entropies as a min heap?
+}
+
+fn valid_neighbors(width: usize, height: usize) -> Vec<Vec<(Direction, usize)>> {
+    let slot_count = width * height;
+    let mut valid_neighbors = vec![Vec::new(); slot_count];
+    for (slot, neighbors) in valid_neighbors.iter_mut().enumerate() {
+        let x = slot % width;
+        let y = slot / width;
+        if x > 0 {
+            neighbors.push((Direction::Left, slot-1));
+        }
+        if x < width-1 {
+            neighbors.push((Direction::Right, slot+1));
+        }
+        if y > 0 {
+            neighbors.push((Direction::Up, slot-width));
+        }
+        if y < height-1 {
+            neighbors.push((Direction::Down, slot+width));
+        }
+    }
+    return valid_neighbors;
 }
 
 impl Wave {
@@ -24,6 +47,7 @@ impl Wave {
         let states = vec![vec![true; tile_count]; slot_count];
         let mut rng = thread_rng();
         let mut entropies = vec![0.0; slot_count];
+        let neighbors = valid_neighbors(width, height);
         for entropy in entropies.iter_mut() {
             *entropy = tile_count as f32 + rng.gen::<f32>();
         }
@@ -34,6 +58,7 @@ impl Wave {
             observed_count: 0,
             rng: rng,
             connectors: connectors,
+            neighbors: neighbors,
             states: states,
             entropies: entropies,
         };
@@ -74,7 +99,8 @@ impl Wave {
                 stack.pop();
             } else {
                 visited.insert(current_slot);
-                for (direction, neighbor_slot) in self.neighbors(current_slot) { // TODO: Cache all neighbors
+                let current_neighbors = &self.neighbors[current_slot];
+                for (direction, neighbor_slot) in current_neighbors.iter() { // TODO: Cache all neighbors
                     let mut possible_connectors = HashSet::new();
                     for (tile, is_possible) in self.states[current_slot].iter().enumerate() {
                         if *is_possible {
@@ -88,39 +114,20 @@ impl Wave {
                         Direction::Up => Direction::Down,
                         Direction::Down => Direction::Up,
                     };
-                    for (tile, is_possible) in self.states[neighbor_slot].iter_mut().enumerate() {
+                    for (tile, is_possible) in self.states[*neighbor_slot].iter_mut().enumerate() {
                         let connector = self.connectors[&reverse][tile];
                         if *is_possible && !possible_connectors.contains(&connector) {
                             *is_possible = false;
-                            self.entropies[neighbor_slot] -= 1.0;
+                            self.entropies[*neighbor_slot] -= 1.0;
                             // TODO: Observe neighbor_slot if entropy < 2.0
                             // TODO: Return false if entropy < 1.0
                         }
                     }
-                    stack.push(neighbor_slot);
+                    stack.push(*neighbor_slot);
                 }
             }
         }
         return false;
-    }
-
-    fn neighbors(&self, slot: usize) -> Vec<(Direction, usize)> {
-        let mut neighbors = Vec::new();
-        let x = slot % self.width;
-        let y = slot / self.width;
-        if x > 0 {
-            neighbors.push((Direction::Left, slot-1));
-        }
-        if x < self.width-1 {
-            neighbors.push((Direction::Right, slot+1));
-        }
-        if y > 0 {
-            neighbors.push((Direction::Up, slot-self.width));
-        }
-        if y < self.height-1 {
-            neighbors.push((Direction::Down, slot+self.width));
-        }
-        return neighbors;
     }
 
     pub fn is_collapsed(&self) -> bool {
