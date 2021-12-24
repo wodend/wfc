@@ -1,0 +1,114 @@
+{
+    "size": 32,
+    "extension": "png",
+    "graphics": [
+        {
+            "name": "cross",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [1, 0],
+                [1, 0],
+                [2, 3],
+                [2, 3]
+            ]
+        },
+        {
+            "name": "cross-2",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [2, 0],
+                [2, 0],
+                [1, 1],
+                [1, 1]
+            ]
+        },
+        {
+            "name": "empty",
+            "rotation_count": 0,
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [0, -1],
+                [0, -1],
+                [0, -1],
+                [0, -1]
+            ]
+        },
+        {
+            "name": "line-high",
+            "rotation_count": 3,
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [1, 0],
+                [1, 0],
+                [0, -1],
+                [0, -1]
+            ]
+        },
+        {
+            "name": "line-low",
+            "rotation_count": 3,
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [2, 0],
+                [2, 0],
+                [0, -1],
+                [0, -1]
+            ]
+        },
+        {
+            "name": "stair",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [1, 0],
+                [2, 0],
+                [0, -1],
+                [0, -1]
+            ]
+        },
+        {
+            "name": "turn",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [1, 0],
+                [0, -1],
+                [0, -1],
+                [2, 3]
+            ]
+        },
+        {
+            "name": "turn-1",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [1, 0],
+                [0, -1],
+                [0, -1],
+                [1, 1]
+            ]
+        },
+        {
+            "name": "turn-2",
+            "rotation_count": 3,
+            "reflect_x": true,
+            "reflect_y": true,
+            "connector_spec": [
+                [2, 2],
+                [0, -1],
+                [0, -1],
+                [2, 3]
+            ]
+        }
+    ]
+}

@@ -1,9 +1,10 @@
-use crate::graphics::Direction;
 use rand::{thread_rng, Rng};
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use std::collections::HashSet;
 use std::collections::HashMap;
+
+use super::graphics::{Direction, Connector};
 
 #[derive(Debug)]
 pub struct Wave {
@@ -12,7 +13,7 @@ pub struct Wave {
     height: usize,
     observed_count: usize,
     rng: ThreadRng,
-    connectors: HashMap<Direction, Vec<usize>>,
+    connector_map: HashMap<Direction, Vec<Connector>>,
     neighbors: Vec<Vec<(Direction, usize)>>, // [slot]
     states: Vec<Vec<bool>>, // [slot][tile]
     entropies: Vec<f32>, // [slot] TODO: Store entropies as a min heap?
@@ -41,8 +42,8 @@ fn valid_neighbors(width: usize, height: usize) -> Vec<Vec<(Direction, usize)>> 
 }
 
 impl Wave {
-    pub fn new(connectors: HashMap<Direction, Vec<usize>>, width: usize, height: usize) -> Self {
-        let tile_count = connectors[&Direction::Left].len();
+    pub fn new(connector_map: HashMap<Direction, Vec<Connector>>, width: usize, height: usize) -> Self {
+        let tile_count = connector_map[&Direction::Left].len();
         let slot_count = width * height;
         let states = vec![vec![true; tile_count]; slot_count];
         let mut rng = thread_rng();
@@ -57,7 +58,7 @@ impl Wave {
             height: height,
             observed_count: 0,
             rng: rng,
-            connectors: connectors,
+            connector_map: connector_map,
             neighbors: neighbors,
             states: states,
             entropies: entropies,
@@ -100,11 +101,11 @@ impl Wave {
             } else {
                 visited.insert(current_slot);
                 let current_neighbors = &self.neighbors[current_slot];
-                for (direction, neighbor_slot) in current_neighbors.iter() { // TODO: Cache all neighbors
+                for (direction, neighbor_slot) in current_neighbors.iter() {
                     let mut possible_connectors = HashSet::new();
                     for (tile, is_possible) in self.states[current_slot].iter().enumerate() {
                         if *is_possible {
-                            let connector = self.connectors[&direction][tile];
+                            let connector = self.connector_map[&direction][tile];
                             possible_connectors.insert(connector);
                         }
                     }
@@ -115,12 +116,14 @@ impl Wave {
                         Direction::Down => Direction::Up,
                     };
                     for (tile, is_possible) in self.states[*neighbor_slot].iter_mut().enumerate() {
-                        let connector = self.connectors[&reverse][tile];
+                        let connector = self.connector_map[&reverse][tile];
                         if *is_possible && !possible_connectors.contains(&connector) {
                             *is_possible = false;
                             self.entropies[*neighbor_slot] -= 1.0;
+                            if self.entropies[*neighbor_slot] < 1.0 {
+                                return true;
+                            }
                             // TODO: Observe neighbor_slot if entropy < 2.0
-                            // TODO: Return false if entropy < 1.0
                         }
                     }
                     stack.push(*neighbor_slot);

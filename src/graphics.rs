@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 use std::path::Path;
 use std::fs;
 use serde::Deserialize;
@@ -7,11 +7,27 @@ use crate::wave::Wave;
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Direction {
-    Left,
-    Right,
-    Up,
-    Down,
+    Left = 0,
+    Right = 1,
+    Up = 2,
+    Down = 3,
 }
+const DIRECTION_COUNT: usize = 4;
+
+impl Direction {
+    fn from_usize(value: usize) -> Direction {
+        return match value {
+            0 => Direction::Left,
+            1 => Direction::Right,
+            2 => Direction::Up,
+            3 => Direction::Down,
+            _ => panic!("Unknown Direction: {}", value),
+        }
+    }
+}
+
+pub type Connector = (usize, i8);
+type ConnectorSpec = [Connector; DIRECTION_COUNT];
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -24,10 +40,9 @@ pub struct Config {
 struct Graphic {
     name: String,
     rotation_count: usize,
-    left: usize,
-    right: usize,
-    up: usize,
-    down: usize,
+    reflect_x: bool,
+    reflect_y: bool,
+    connector_spec: ConnectorSpec,
 }
 
 pub fn read_config(sample_dir: &str) -> Config {
@@ -40,47 +55,105 @@ pub fn tiles(config: &Config, sample_dir: &str) -> Vec<DynamicImage> {
     let mut tiles = Vec::new();
     for graphic in &config.graphics {
         let path = Path::new(sample_dir).join(&graphic.name).with_extension(&config.extension);
-        let mut image = image::open(path).unwrap();
-        tiles.push(image.clone());
-        for _ in 0..graphic.rotation_count {
-            image = image.rotate90();
-            tiles.push(image.clone());
+        let image = image::open(path).unwrap();
+        push_tiles(&mut tiles, &image, graphic.rotation_count);
+        if graphic.reflect_x {
+            let image = image.flipv();
+            push_tiles(&mut tiles, &image, graphic.rotation_count);
+        }
+        if graphic.reflect_y {
+            let image = image.fliph();
+            push_tiles(&mut tiles, &image, graphic.rotation_count);
         }
     }
     return tiles;
 }
 
-pub fn connectors(config: &Config) -> HashMap<Direction, Vec<usize>> {
-    // TODO: Serialize connectors and read from CSV?
-    let mut connectors = HashMap::from([
-        (Direction::Left, Vec::new()),
-        (Direction::Right, Vec::new()),
-        (Direction::Up, Vec::new()),
-        (Direction::Down, Vec::new()),
-    ]);
+pub fn push_tiles(tiles: &mut Vec<DynamicImage>, image: &DynamicImage, rotation_count: usize) {
+    let mut image = image.clone();
+    tiles.push(image.clone());
+    for _ in 0..rotation_count {
+        image = image.rotate90();
+        tiles.push(image.clone());
+    }
+}
+
+pub fn connector_map(config: &Config) -> HashMap<Direction, Vec<Connector>> {
+    let mut connector_map = HashMap::new();
+    for direction in 0..DIRECTION_COUNT {
+        connector_map.insert(
+            Direction::from_usize(direction),
+            Vec::new(),
+        );
+    }
     for graphic in &config.graphics {
-        let mut left = graphic.left;
-        let mut right = graphic.right;
-        let mut up = graphic.up;
-        let mut down = graphic.down;
-        connectors.get_mut(&Direction::Left).unwrap().push(left);
-        connectors.get_mut(&Direction::Right).unwrap().push(right);
-        connectors.get_mut(&Direction::Up).unwrap().push(up);
-        connectors.get_mut(&Direction::Down).unwrap().push(down);
-        for _ in 0..graphic.rotation_count {
-            // Rotate 90 degrees clockwise
-            let tmp = left;
-            left = down;
-            down = right;
-            right = up;
-            up = tmp;
-            connectors.get_mut(&Direction::Left).unwrap().push(left);
-            connectors.get_mut(&Direction::Right).unwrap().push(right);
-            connectors.get_mut(&Direction::Up).unwrap().push(up);
-            connectors.get_mut(&Direction::Down).unwrap().push(down);
+        println!("{:?}", graphic.name);
+        let connector_spec = graphic.connector_spec;
+        insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
+        if graphic.reflect_x {
+            let connector_spec = reflect_x(connector_spec);
+            insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
+        }
+        if graphic.reflect_y {
+            let connector_spec = reflect_y(connector_spec);
+            insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
         }
     }
-    return connectors;
+    return connector_map;
+}
+
+fn insert_connections(connector_map: &mut HashMap<Direction, Vec<Connector>>, connector_spec: ConnectorSpec, rotation_count: usize) {
+    let mut connector_spec = connector_spec.clone();
+    println!("{:?}", connector_spec);
+    insert(connector_map, connector_spec);
+    for _ in 0..rotation_count {
+        connector_spec = rotate90(connector_spec);
+        println!("{:?}", connector_spec);
+        insert(connector_map, connector_spec);
+    }
+}
+
+fn insert(connector_map: &mut HashMap<Direction, Vec<Connector>>, connector_spec: ConnectorSpec) {
+    for (direction_id, connector) in connector_spec.iter().enumerate() {
+        let direction = Direction::from_usize(direction_id);
+        connector_map.get_mut(&direction).unwrap().push(*connector);
+    }
+}
+
+fn rotate90(connector_spec: ConnectorSpec) -> ConnectorSpec {
+    let mut output = [(0, 0); 4];
+    output[Direction::Left as usize] = connector_spec[Direction::Down as usize];
+    output[Direction::Right as usize] = connector_spec[Direction::Up as usize];
+    output[Direction::Up as usize] = connector_spec[Direction::Left as usize];
+    output[Direction::Down as usize] = connector_spec[Direction::Right as usize];
+    for direction in 0..DIRECTION_COUNT {
+        if output[direction].1 != -1 {
+            output[direction].1 = (output[direction].1 + 1) % 4;
+        }
+    }
+    return output;
+}
+
+fn reflect_x(connector_spec: ConnectorSpec) -> ConnectorSpec {
+    let mut output = [(0, 0); 4];
+    output[Direction::Up as usize] = connector_spec[Direction::Down as usize];
+    output[Direction::Down as usize] = connector_spec[Direction::Up as usize];
+    output[Direction::Left as usize] = connector_spec[Direction::Left as usize];
+    output[Direction::Right as usize] = connector_spec[Direction::Right as usize];
+    output[Direction::Left as usize].1 = (connector_spec[Direction::Left as usize].1 + 2) % 4;
+    output[Direction::Right as usize].1 = (connector_spec[Direction::Right as usize].1 + 2) % 4;
+    return output;
+}
+
+fn reflect_y(connector_spec: ConnectorSpec) -> ConnectorSpec {
+    let mut output = [(0, 0); 4];
+    output[Direction::Left as usize] = connector_spec[Direction::Right as usize];
+    output[Direction::Right as usize] = connector_spec[Direction::Left as usize];
+    output[Direction::Up as usize] = connector_spec[Direction::Up as usize];
+    output[Direction::Down as usize] = connector_spec[Direction::Down as usize];
+    output[Direction::Up as usize].1 = (connector_spec[Direction::Up as usize].1 + 2) % 4;
+    output[Direction::Down as usize].1 = (connector_spec[Direction::Down as usize].1 + 2) % 4;
+    return output;
 }
 
 pub fn render(wave: Wave, config: Config, tiles: Vec<DynamicImage>, output_path: &str) {
@@ -92,7 +165,7 @@ pub fn render(wave: Wave, config: Config, tiles: Vec<DynamicImage>, output_path:
         let y = ((slot / wave.width()) * config.size) as u32;
         for (tile, state) in state.iter().enumerate() {
             if *state {
-                let image= &tiles[tile];
+                let image = &tiles[tile];
                 if let Err(err) = output.copy_from(image, x, y) {
                     println!("Error while copying image to output: {}", err);
                 }
