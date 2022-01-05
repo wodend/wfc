@@ -5,34 +5,50 @@
         {
             "name": "corner",
             "rotation_count": 3,
-            "left": 0,
-            "right": 1,
-            "up": 1,
-            "down": 0
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [0, -1],
+                [1, -1],
+                [1, -1],
+                [0, -1]
+            ]
         },
         {
             "name": "cross",
             "rotation_count": 1,
-            "left": 1,
-            "right": 1,
-            "up": 1,
-            "down": 1
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [1, -1],
+                [1, -1],
+                [1, -1],
+                [1, -1]
+            ]
         },
         {
             "name": "empty",
             "rotation_count": 0,
-            "left": 0,
-            "right": 0,
-            "up": 0,
-            "down": 0
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [0, -1],
+                [0, -1],
+                [0, -1],
+                [0, -1]
+            ]
         },
         {
             "name": "line",
             "rotation_count": 1,
-            "left": 1,
-            "right": 1,
-            "up": 0,
-            "down": 0
+            "reflect_x": false,
+            "reflect_y": false,
+            "connector_spec": [
+                [1, -1],
+                [1, -1],
+                [0, -1],
+                [0, -1]
+            ]
         }
     ]
 }
