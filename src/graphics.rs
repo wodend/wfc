@@ -91,10 +91,12 @@ pub fn connector_map(config: &Config) -> HashMap<Direction, Vec<Connector>> {
         let connector_spec = graphic.connector_spec;
         insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
         if graphic.reflect_x {
+            println!("{:?}", "reflect_x");
             let connector_spec = reflect_x(connector_spec);
             insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
         }
         if graphic.reflect_y {
+            println!("{:?}", "reflect_y");
             let connector_spec = reflect_y(connector_spec);
             insert_connections(&mut connector_map, connector_spec, graphic.rotation_count);
         }
@@ -106,9 +108,9 @@ fn insert_connections(connector_map: &mut HashMap<Direction, Vec<Connector>>, co
     let mut connector_spec = connector_spec.clone();
     println!("{:?}", connector_spec);
     insert(connector_map, connector_spec);
-    for _ in 0..rotation_count {
+    for i in 0..rotation_count {
         connector_spec = rotate90(connector_spec);
-        println!("{:?}", connector_spec);
+        println!("rotation {:?} {:?}", i, connector_spec);
         insert(connector_map, connector_spec);
     }
 }
@@ -127,11 +129,17 @@ fn rotate90(connector_spec: ConnectorSpec) -> ConnectorSpec {
     output[Direction::Up as usize] = connector_spec[Direction::Left as usize];
     output[Direction::Down as usize] = connector_spec[Direction::Right as usize];
     for direction in 0..DIRECTION_COUNT {
-        if output[direction].1 != -1 {
-            output[direction].1 = (output[direction].1 + 1) % 4;
-        }
+        output[direction].1 = increment(output[direction].1, 1);
     }
     return output;
+}
+
+fn increment(connector_rotation: i8, by: i8) -> i8 {
+    if connector_rotation != -1 {
+         return (connector_rotation + by) % 4;
+    } else {
+        return connector_rotation;
+    }
 }
 
 fn reflect_x(connector_spec: ConnectorSpec) -> ConnectorSpec {
@@ -140,8 +148,8 @@ fn reflect_x(connector_spec: ConnectorSpec) -> ConnectorSpec {
     output[Direction::Down as usize] = connector_spec[Direction::Up as usize];
     output[Direction::Left as usize] = connector_spec[Direction::Left as usize];
     output[Direction::Right as usize] = connector_spec[Direction::Right as usize];
-    output[Direction::Left as usize].1 = (connector_spec[Direction::Left as usize].1 + 2) % 4;
-    output[Direction::Right as usize].1 = (connector_spec[Direction::Right as usize].1 + 2) % 4;
+    output[Direction::Left as usize].1 = increment(output[Direction::Left as usize].1, 2);
+    output[Direction::Right as usize].1 = increment(output[Direction::Right as usize].1, 2);
     return output;
 }
 
@@ -151,8 +159,8 @@ fn reflect_y(connector_spec: ConnectorSpec) -> ConnectorSpec {
     output[Direction::Right as usize] = connector_spec[Direction::Left as usize];
     output[Direction::Up as usize] = connector_spec[Direction::Up as usize];
     output[Direction::Down as usize] = connector_spec[Direction::Down as usize];
-    output[Direction::Up as usize].1 = (connector_spec[Direction::Up as usize].1 + 2) % 4;
-    output[Direction::Down as usize].1 = (connector_spec[Direction::Down as usize].1 + 2) % 4;
+    output[Direction::Up as usize].1 = increment(output[Direction::Up as usize].1, 2);
+    output[Direction::Down as usize].1 = increment(output[Direction::Down as usize].1, 2);
     return output;
 }
 

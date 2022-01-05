@@ -1,9 +1,7 @@
 mod graphics;
 mod wave;
 
-use graphics::connector_map;
-
-use crate::wave::Wave;
+use wave::Wave;
 
 pub fn run(sample_dir: &str, width: usize, height: usize, output_path: &str) -> bool {
     let config = graphics::read_config(sample_dir);

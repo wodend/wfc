@@ -120,10 +120,12 @@ impl Wave {
                         if *is_possible && !possible_connectors.contains(&connector) {
                             *is_possible = false;
                             self.entropies[*neighbor_slot] -= 1.0;
-                            if self.entropies[*neighbor_slot] < 1.0 {
+                            if self.entropies[*neighbor_slot] < 1.0 { // No possible tiles
                                 return true;
                             }
                             // TODO: Observe neighbor_slot if entropy < 2.0
+                            // if self.entropies[*neighbor_slot] < 2.0 { // Only one possible tile
+                            // }
                         }
                     }
                     stack.push(*neighbor_slot);
