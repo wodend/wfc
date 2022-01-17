@@ -1,24 +1,23 @@
-mod graphics;
+mod coordinate;
+mod model;
+mod tile;
+mod vox;
 mod wave;
 
-use wave::Wave;
+use model::Model;
 
-pub fn run(sample_dir: &str, width: usize, height: usize, output_path: &str) -> bool {
-    let config = graphics::read_config(sample_dir);
-    let tiles = graphics::tiles(&config, sample_dir);
-    let connector_map = graphics::connector_map(&config);
-    let mut wave = Wave::new(connector_map, width, height);
+pub fn run(sample_dir: &str, width: usize, depth: usize, height: usize, output_file: &str) {
+    let model = Model::new(sample_dir, width, depth, height, output_file);
     loop {
-        let slot = wave.lowest_entropy_slot();
-        wave.observe(slot);
-        let is_contradiction = wave.propogate(slot);
-        if is_contradiction {
-            graphics::render(wave, config, tiles, output_path);
-            return false;
-        }
-        if wave.is_collapsed() {
-            graphics::render(wave, config, tiles, output_path);
-            return true;
+        let wfc = model.wfc();
+        match wfc {
+            Ok(()) => {
+                println!("Wave function collapse completed successfully, exiting");
+                break;
+            }
+            Err(e) => {
+                println!("Wave function collapse failed due to {:?}, retrying", e);
+            }
         }
     }
 }

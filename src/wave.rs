@@ -1,153 +1,149 @@
-use rand::{thread_rng, Rng};
+use rand;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
-use std::collections::HashSet;
-use std::collections::HashMap;
+use rand::Rng;
 
-use super::graphics::{Direction, Connector};
+use std::collections::HashSet;
 
 #[derive(Debug)]
-pub struct Wave {
-    len: usize,
-    width: usize,
-    height: usize,
-    observed_count: usize,
+/// A container to hold the state of `wfc` waves.
+pub struct Waves {
+    collapsed_count: usize,
     rng: ThreadRng,
-    connector_map: HashMap<Direction, Vec<Connector>>,
-    neighbors: Vec<Vec<(Direction, usize)>>, // [slot]
-    states: Vec<Vec<bool>>, // [slot][tile]
-    entropies: Vec<f32>, // [slot] TODO: Store entropies as a min heap?
+    entropies: Vec<f32>,
+    tiles: Vec<HashSet<usize>>,
 }
 
-fn valid_neighbors(width: usize, height: usize) -> Vec<Vec<(Direction, usize)>> {
-    let slot_count = width * height;
-    let mut valid_neighbors = vec![Vec::new(); slot_count];
-    for (slot, neighbors) in valid_neighbors.iter_mut().enumerate() {
-        let x = slot % width;
-        let y = slot / width;
-        if x > 0 {
-            neighbors.push((Direction::Left, slot-1));
-        }
-        if x < width-1 {
-            neighbors.push((Direction::Right, slot+1));
-        }
-        if y > 0 {
-            neighbors.push((Direction::Up, slot-width));
-        }
-        if y < height-1 {
-            neighbors.push((Direction::Down, slot+width));
-        }
-    }
-    return valid_neighbors;
+#[derive(Debug)]
+/// A `Waves` error
+pub enum WavesError {
+    Contradiction,
 }
 
-impl Wave {
-    pub fn new(connector_map: HashMap<Direction, Vec<Connector>>, width: usize, height: usize) -> Self {
-        let tile_count = connector_map[&Direction::Left].len();
-        let slot_count = width * height;
-        let states = vec![vec![true; tile_count]; slot_count];
-        let mut rng = thread_rng();
-        let mut entropies = vec![0.0; slot_count];
-        let neighbors = valid_neighbors(width, height);
+impl Waves {
+    /// Constructs an uncollapsed `Waves`.
+    pub fn new(wave_count: usize, tile_count: usize) -> Self {
+        let collapsed_count = 0;
+        let mut rng = rand::thread_rng();
+        let mut entropies = vec![tile_count as f32; wave_count];
         for entropy in entropies.iter_mut() {
-            *entropy = tile_count as f32 + rng.gen::<f32>();
+            *entropy += rng.gen::<f32>(); // Add noise to break min entropy ties
         }
+        let mut all_tiles = HashSet::new();
+        for tile in 0..tile_count {
+            all_tiles.insert(tile);
+        }
+        let tiles = vec![all_tiles; wave_count];
         return Self {
-            len: slot_count,
-            width: width,
-            height: height,
-            observed_count: 0,
-            rng: rng,
-            connector_map: connector_map,
-            neighbors: neighbors,
-            states: states,
+            collapsed_count: collapsed_count,
             entropies: entropies,
+            tiles: tiles,
+            rng: rng,
         };
     }
 
-    pub fn lowest_entropy_slot(&self) -> usize {
-        let mut min_slot = 0;
-        let mut min_entropy= self.len as f32 + 2.0;
-        for (slot, entropy) in self.entropies.iter().enumerate() {
+    /// Returns the minimum entropy wave.
+    pub fn min_entropy_wave(&self) -> usize {
+        let mut min_entropy_wave = 0;
+        let mut min_entropy = f32::MAX;
+        for (wave, entropy) in self.entropies.iter().enumerate() {
             if *entropy > 0.0 && *entropy < min_entropy {
-                min_slot = slot;
+                println!("found min entropy {} {}", wave, *entropy);
+                min_entropy_wave = wave;
                 min_entropy = *entropy;
             }
         }
-        return min_slot;
+        return min_entropy_wave;
     }
 
-    pub fn observe(&mut self, slot: usize) {
-        let mut possible_tiles = Vec::new();
-        for (tile, is_possible) in self.states[slot].iter_mut().enumerate() {
-            if *is_possible {
-                possible_tiles.push(tile);
-            }
-            *is_possible = false;
-        }
-        let observed_tile = possible_tiles.choose(&mut self.rng).unwrap();
-        self.states[slot][*observed_tile] = true;
-        self.entropies[slot] = 0.0;
-        self.observed_count += 1;
+    /// Picks a tile at random from the tiles of `wave`.
+    pub fn observe(&mut self, wave: usize) {
+        let tiles = Vec::from_iter(self.tiles[wave].clone());
+        let observed_tile = tiles.choose(&mut self.rng).unwrap();
+        self.tiles[wave] = HashSet::from([*observed_tile]);
+        self.collapse(wave);
     }
 
-    pub fn propogate(&mut self, slot: usize) -> bool {
-        let mut stack = vec![slot];
+    /// Marks a wave as collapsed.
+    fn collapse(&mut self, wave: usize) {
+        self.entropies[wave] = 0.0;
+        self.collapsed_count += 1;
+    }
+
+    /// Propogates `constraints` over `graph` starting from `wave`.
+    pub fn propogate(
+        &mut self,
+        constraints: &Vec<Vec<HashSet<usize>>>,
+        graph: &Vec<Vec<(usize, usize)>>,
+        wave: usize,
+    ) -> Result<(), WavesError> {
+        let mut stack = vec![wave];
         let mut visited = HashSet::new();
-        while !stack.is_empty() {
-            let current_slot = stack.pop().unwrap();
-            if visited.contains(&current_slot) {
-                stack.pop();
-            } else {
-                visited.insert(current_slot);
-                let current_neighbors = &self.neighbors[current_slot];
-                for (direction, neighbor_slot) in current_neighbors.iter() {
-                    let mut possible_connectors = HashSet::new();
-                    for (tile, is_possible) in self.states[current_slot].iter().enumerate() {
-                        if *is_possible {
-                            let connector = self.connector_map[&direction][tile];
-                            possible_connectors.insert(connector);
-                        }
-                    }
-                    let reverse = match direction {
-                        Direction::Left => Direction::Right,
-                        Direction::Right => Direction::Left,
-                        Direction::Up => Direction::Down,
-                        Direction::Down => Direction::Up,
-                    };
-                    for (tile, is_possible) in self.states[*neighbor_slot].iter_mut().enumerate() {
-                        let connector = self.connector_map[&reverse][tile];
-                        if *is_possible && !possible_connectors.contains(&connector) {
-                            *is_possible = false;
-                            self.entropies[*neighbor_slot] -= 1.0;
-                            if self.entropies[*neighbor_slot] < 1.0 { // No possible tiles
-                                return true;
-                            }
-                            // TODO: Observe neighbor_slot if entropy < 2.0
-                            // if self.entropies[*neighbor_slot] < 2.0 { // Only one possible tile
-                            // }
-                        }
-                    }
-                    stack.push(*neighbor_slot);
+        while let Some(wave) = stack.pop() {
+            visited.insert(wave);
+            // TODO: Spawn a new thread for each face
+            let mut constrain_results = Vec::new();
+            for (edge_wave, edge_face) in graph[wave].iter() {
+                if !visited.contains(edge_wave) && self.entropies[*edge_wave] > 0.0 {
+                    constrain_results.push(self.constrain(
+                        *edge_wave,
+                        constraints,
+                        wave,
+                        *edge_face,
+                    ));
+                }
+            }
+            for result in constrain_results {
+                let (edge_wave, removed_tile_counts) = result?;
+                if removed_tile_counts > 0 {
+                    stack.push(edge_wave);
                 }
             }
         }
-        return false;
+        return Ok(());
     }
 
-    pub fn is_collapsed(&self) -> bool {
-        return self.observed_count == self.len;
+    /// Constrains `edge_wave` with `constraints` of `wave` on `edge_face`.
+    fn constrain(
+        &mut self,
+        edge_wave: usize,
+        constraints: &Vec<Vec<HashSet<usize>>>,
+        wave: usize,
+        edge_face: usize,
+    ) -> Result<(usize, usize), WavesError> {
+        let constraints = &constraints[edge_face];
+        let mut valid_tiles = HashSet::new();
+        for tile in self.tiles[wave].iter() {
+            for valid_tile in constraints[*tile].iter() {
+                valid_tiles.insert(*valid_tile);
+            }
+        }
+        let mut removed_tile_count = 0;
+        let tiles = self.tiles[edge_wave].clone();
+        for tile in tiles.iter() {
+            if !valid_tiles.contains(tile) {
+                self.entropies[edge_wave] -= 1.0;
+                self.tiles[edge_wave].remove(tile);
+                removed_tile_count += 1;
+            }
+        }
+        if self.tiles[edge_wave].is_empty() {
+            return Err(WavesError::Contradiction);
+        }
+        if self.tiles[edge_wave].len() == 1 {
+            println!("Constrain collapse {:?}", edge_wave);
+            self.collapse(edge_wave);
+        }
+        return Ok((edge_wave, removed_tile_count));
     }
 
-    pub fn width(&self) -> usize {
-        return self.width;
+    /// Returns true if all waves are collapsed
+    pub fn are_collapsed(&self) -> bool {
+        return self.collapsed_count == self.entropies.len();
     }
 
-    pub fn height(&self) -> usize {
-        return self.height;
-    }
-
-    pub fn states(&self) -> &Vec<Vec<bool>> {
-        return &self.states;
+    /// Returns the current `tiles` state of all waves
+    pub fn tiles(&self) -> Vec<HashSet<usize>> {
+        return self.tiles.clone();
     }
 }
