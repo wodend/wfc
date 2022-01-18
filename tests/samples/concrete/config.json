@@ -1,90 +1,148 @@
 {
-    "size": 64,
-    "tiles": [
+    "tile_size": 64,
+    "tile_configs": [
         {
-            "name": "tiles-1-ground",
+            "name": "config-0-road_strait_low",
             "connectors": {
-                "left": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "front": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
+                "Left": {
                     "id": 1,
-                    "rotation": 0
+                    "symmetry": "Symmetrical"
                 },
-                "up": {
+                "Right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "Front": {
                     "id": 0,
-                    "rotation": 0
+                    "symmetry": "Symmetrical"
+                },
+                "Back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
                 }
             }
         },
         {
-            "name": "tiles-2-line-low",
+            "name": "config-1-road_turn_low",
             "connectors": {
-                "left": {
-                    "id": 3,
-                    "symmetry": "Normal"
-                },
-                "right": {
-                    "id": 3,
-                    "symmetry": "Rotated"
-                },
-                "front": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 1,
-                    "rotation": 0
-                },
-                "up": {
+                "Left": {
                     "id": 0,
-                    "rotation": 0
+                    "symmetry": "Symmetrical"
+                },
+                "Right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "Front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Back": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "Down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
                 }
             }
         },
         {
-            "name": "tiles-3-turn-low",
+            "name": "config-2-humus",
             "connectors": {
-                "left": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 3,
-                    "symmetry": "Rotated"
-                },
-                "front": {
-                    "id": 2,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 3,
-                    "symmetry": "Rotated"
-                },
-                "down": {
-                    "id": 1,
-                    "rotation": 0
-                },
-                "up": {
+                "Left": {
                     "id": 0,
-                    "rotation": 0
+                    "symmetry": "Symmetrical"
+                },
+                "Right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-3-soil",
+            "connectors": {
+                "Left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "Right": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "Front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "Back": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "Down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "Up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-4-sky",
+            "connectors": {
+                "Left": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "Right": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "Front": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "Back": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "Down": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "Up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
                 }
             }
         }

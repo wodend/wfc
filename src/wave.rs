@@ -3,7 +3,9 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::Rng;
 
-use std::collections::HashSet;
+use std::{collections::{HashSet,HashMap}, hint::unreachable_unchecked};
+
+use super::model::Face;
 
 #[derive(Debug)]
 /// A container to hold the state of `wfc` waves.
@@ -48,7 +50,7 @@ impl Waves {
         let mut min_entropy = f32::MAX;
         for (wave, entropy) in self.entropies.iter().enumerate() {
             if *entropy > 0.0 && *entropy < min_entropy {
-                println!("found min entropy {} {}", wave, *entropy);
+                // println!("found min entropy {} {}", wave, *entropy);
                 min_entropy_wave = wave;
                 min_entropy = *entropy;
             }
@@ -73,8 +75,8 @@ impl Waves {
     /// Propogates `constraints` over `graph` starting from `wave`.
     pub fn propogate(
         &mut self,
-        constraints: &Vec<Vec<HashSet<usize>>>,
-        graph: &Vec<Vec<(usize, usize)>>,
+        constraints: &HashMap<Face, Vec<HashSet<usize>>>,
+        graph: &Vec<Vec<(usize, Face)>>,
         wave: usize,
     ) -> Result<(), WavesError> {
         let mut stack = vec![wave];
@@ -89,7 +91,7 @@ impl Waves {
                         *edge_wave,
                         constraints,
                         wave,
-                        *edge_face,
+                        edge_face,
                     ));
                 }
             }
@@ -107,9 +109,9 @@ impl Waves {
     fn constrain(
         &mut self,
         edge_wave: usize,
-        constraints: &Vec<Vec<HashSet<usize>>>,
+        constraints: &HashMap<Face, Vec<HashSet<usize>>>,
         wave: usize,
-        edge_face: usize,
+        edge_face: &Face,
     ) -> Result<(usize, usize), WavesError> {
         let constraints = &constraints[edge_face];
         let mut valid_tiles = HashSet::new();
@@ -130,10 +132,10 @@ impl Waves {
         if self.tiles[edge_wave].is_empty() {
             return Err(WavesError::Contradiction);
         }
-        if self.tiles[edge_wave].len() == 1 {
-            println!("Constrain collapse {:?}", edge_wave);
-            self.collapse(edge_wave);
-        }
+        //if self.tiles[edge_wave].len() == 1 {
+        //    //println!("Constrain collapse {:?}", edge_wave);
+        //    self.collapse(edge_wave);
+        //}
         return Ok((edge_wave, removed_tile_count));
     }
 

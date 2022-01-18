@@ -7,7 +7,7 @@
 //     wfc::run(sample_dir, width, height, output_path);
 //     assert!(true);
 // }
-// 
+//
 // #[test]
 // fn test_stairs() {
 //     let sample_dir = "tests/samples/stairs";
@@ -22,8 +22,8 @@
 fn test_concrete() {
     let sample_dir = "tests/samples/concrete";
     let width = 10;
-    let depth = 10;
-    let height = 1;
+    let depth = 9;
+    let height = 8;
     let output_file = "tests/output/concrete.txt";
     wfc::run(sample_dir, width, depth, height, output_file);
     assert!(true);

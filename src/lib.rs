@@ -1,4 +1,3 @@
-mod coordinate;
 mod model;
 mod tile;
 mod vox;
