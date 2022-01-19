@@ -8,11 +8,6 @@ use serde::{Deserialize, Serialize};
 use super::model::Face;
 use super::vox::Vox;
 
-
-// tmp
-use std::fs::File;
-use std::io::{BufReader, BufWriter, Write};
-
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     tile_size: usize,
@@ -49,7 +44,7 @@ enum Symmetry {
 }
 
 impl Connectors {
-    /// Returns a new connectors rotated `rotation` degrees about the z axis
+    /// Returns a new `Connectors` rotated `rotation` degrees about the z axis
     fn rotated(&self, rotation: &Rotation) -> Self {
         return match rotation {
             Rotation::R0 => Self {
@@ -87,6 +82,7 @@ impl Connectors {
         };
     }
 
+    /// Returns a reference to the `Connector` for `face`.
     fn get(&self, face: &Face) -> &Connector {
         return match face {
             Face::Left => &self.left,
@@ -100,6 +96,7 @@ impl Connectors {
 }
 
 #[derive(Debug)]
+/// A container for tile data provided in a sample directory.
 pub struct Tiles {
     size: usize,
     vox_paths: Vec<PathBuf>,
@@ -108,6 +105,7 @@ pub struct Tiles {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+/// A 3D z axis rotation following the right-hand rule.
 pub enum Rotation {
     R0,
     R90,
@@ -116,6 +114,7 @@ pub enum Rotation {
 }
 
 impl Tiles {
+    /// Returns a new `Tiles` based on the config in `sample_dir`.
     pub fn from(sample_dir: &str) -> std::io::Result<Self> {
         let sample_dir = Path::new(sample_dir).to_path_buf();
         let config_path = sample_dir.join("config.json");
@@ -138,6 +137,7 @@ impl Tiles {
         return Ok(tiles);
     }
 
+    /// Generates transformed tiles and vox objects for each config tile.
     pub fn generate_transformed_tiles(&mut self) {
         let mut generated_count = 0;
         let mut generated = Vec::new();
@@ -181,10 +181,7 @@ impl Tiles {
         }
     }
 
-    pub fn len(&self) -> usize {
-        return self.vox_paths.len();
-    }
-    
+    /// Returns valid tiles for each tile on each face to constrain `wfc`.
     pub fn constraints(&self) -> HashMap<Face, Vec<HashSet<usize>>> {
         let mut constraints = HashMap::new();
         let faces = [Face::Left, Face::Right, Face::Front, Face::Back, Face::Down, Face::Up];
@@ -221,41 +218,14 @@ impl Tiles {
             }
             constraints.insert(face, face_constraints);
         }
-        // let faces = [Face::Left, Face::Right, Face::Front, Face::Back, Face::Down, Face::Up];
-        let faces = [Face::Left];
-        for (tile, path) in self.vox_paths.iter().enumerate() {
-            println!("\n{:?} constraints", path);
-            for face in faces.iter() {
-                println!("{:?}", face);
-                for tile in constraints[face][tile].iter() {
-                    println!("{:?}", self.vox_paths[*tile]);
-                }
-            }
-            println!("\n");
-        }
         return constraints;
     }
 
-    // TODO: Move this function to vox module
-    pub fn render(&self, tiles: Vec<HashSet<usize>>, coordinates: Vec<(usize, usize, usize)>, output_file: &str) {
-        // TODO: Store fq path as tile name so we don't have to take in sample dir
-        let file = File::create(output_file).expect("Unable to create vox viewer file");
-        let mut writer = BufWriter::new(file);
-        writer.write("// Generated wfc output\n".as_bytes());
-        let mv_import_size = 10 * self.size; // TODO: Remove this hard-coded value
-        let header = format!("mv_import {mv_import_size}\n", mv_import_size=mv_import_size);
-        writer.write(header.as_bytes());
-        for ((x, y, z), tiles) in coordinates.iter().zip(tiles) {
-            let x = x * self.size;
-            let y = y * self.size;
-            let z = z * self.size;
-            for tile in tiles.iter() {
-                let path = self.vox_paths[*tile].clone();
-                let absolute_path = path.canonicalize().unwrap();
-                let absolute_path_str = absolute_path.to_str().unwrap();
-                let tile = format!("{x} {y} {z} {path}\n", x=x, y=y, z=z, path=absolute_path_str);
-                writer.write(tile.as_bytes());
-            }
-        }
+    pub fn size(&self) -> usize {
+        return self.size;
+    }
+
+    pub fn vox_paths(&self) -> &Vec<PathBuf> {
+        return &self.vox_paths;
     }
 }

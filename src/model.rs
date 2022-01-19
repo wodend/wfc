@@ -1,3 +1,8 @@
+use std::collections::HashSet;
+use std::fs::File;
+use std::path::PathBuf;
+use std::io::{BufWriter, Write};
+
 use serde::{Deserialize, Serialize};
 
 use super::tile::Tiles;
@@ -5,6 +10,7 @@ use super::wave::Waves;
 use super::wave::WavesError;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
+/// A face of a 3D tile.
 pub enum Face {
     Left,
     Right,
@@ -14,6 +20,7 @@ pub enum Face {
     Up,
 }
 
+/// A container for the necesary data to run `wfc`.
 pub struct Model {
     sample_dir: String,
     width: usize,
@@ -23,7 +30,7 @@ pub struct Model {
 }
 
 impl Model {
-    /// Constructs a `Model` for the Wave Function Collapse Algorithm
+    /// Constructs a `Model` for the Wave Function Collapse Algorithm.
     pub fn new(
         sample_dir: &str,
         width: usize,
@@ -41,27 +48,23 @@ impl Model {
         return model;
     }
 
+    /// Runs the Wave Function Collapse Algorithm.
     pub fn wfc(&self) -> Result<(), WavesError> {
-        let mut tiles = Tiles::from(&self.sample_dir).unwrap();
-        tiles.generate_transformed_tiles();
-        // let tile_set = tiles.tile_set(); // TODO: Add tile set as input to waves
         let mut coordinates = Vec::new();
-        let mut graph = Vec::new();
+        let mut wave_graph = Vec::new();
         for z in 0..self.height {
             for y in 0..self.depth {
                 for x in 0..self.width {
                     coordinates.push((x, y, z));
-                    graph.push(self.edges(x, y, z));
+                    wave_graph.push(self.wave_edges(x, y, z));
                 }
             }
         }
-        println!("{:?}", coordinates);
-        println!("{:?}", graph);
-        println!("center {:?}", graph[self.edge_wave(1, 1, 1)]);
-        let mut waves = Waves::new(graph.len(), tiles.len());
+        let mut tiles = Tiles::from(&self.sample_dir).unwrap();
+        tiles.generate_transformed_tiles();
         let constraints = tiles.constraints();
+        let mut waves = Waves::new(&wave_graph, &constraints);
 
-        let mut i = 0; // TODO: Remove when done debugging
         while !waves.are_collapsed() {
             //println!("\n\nIteration {}", i);
             //println!("Waves {:?}", waves);
@@ -69,16 +72,16 @@ impl Model {
             //println!("Min entropy wave {:?}", wave);
             waves.observe(wave);
             //println!("Observe {:?}", waves);
-            waves.propogate(&constraints, &graph, wave)?;
+            waves.propogate(wave)?;
             //println!("Propogate {:?}", waves);
-            i += 1;
         }
         //println!("\n\nFinal {:?}", waves);
-        tiles.render(waves.tiles(), coordinates, &self.output_file);
+        self.render(tiles.size(), tiles.vox_paths(), coordinates, waves.tiles());
         return Ok(());
     }
 
-    fn edges(&self, x: usize, y: usize, z: usize) -> Vec<(usize, Face)> {
+    /// Returns valid wave edges for an coordinate in the wave graph.
+    fn wave_edges(&self, x: usize, y: usize, z: usize) -> Vec<(usize, Face)> {
         let mut edges = Vec::new();
         if x > 0 {
             let edge_wave = self.edge_wave(x-1, y, z);
@@ -107,7 +110,37 @@ impl Model {
         return edges;
     }
 
+    /// Returns the wave for a given coordinate.
     fn edge_wave(&self, x: usize, y: usize, z: usize) -> usize {
         return x + (y * self.width) + (z * self.width * self.depth);
+    }
+
+    /// Write a MagicaVoxel Viewer mv_import file to render the final waves.
+    pub fn render(
+        &self,
+        tile_size: usize,
+        vox_paths: &Vec<PathBuf>,
+        coordinates: Vec<(usize, usize, usize)>,
+        tiles: Vec<HashSet<usize>>,
+    ) {
+        let file = File::create(&self.output_file).expect("Unable to create vox viewer file");
+        let mut writer = BufWriter::new(file);
+        writer.write("// Generated wfc output\n".as_bytes()).unwrap();
+        let max_dimension_size = std::cmp::max(self.width, std::cmp::max(self.depth, self.height));
+        let mv_import_size =  max_dimension_size * tile_size;
+        let header = format!("mv_import {mv_import_size}\n", mv_import_size=mv_import_size);
+        writer.write(header.as_bytes()).unwrap();
+        for ((x, y, z), tiles) in coordinates.iter().zip(tiles) {
+            let x = x * tile_size;
+            let y = y * tile_size;
+            let z = z * tile_size;
+            for tile in tiles.iter() {
+                let path = vox_paths[*tile].clone();
+                let absolute_path = path.canonicalize().unwrap();
+                let absolute_path_str = absolute_path.to_str().unwrap();
+                let tile = format!("{x} {y} {z} {path}\n", x=x, y=y, z=z, path=absolute_path_str);
+                writer.write(tile.as_bytes()).unwrap();
+            }
+        }
     }
 }

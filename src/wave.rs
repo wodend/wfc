@@ -1,15 +1,17 @@
+use std::collections::{HashSet,HashMap};
+
 use rand;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::Rng;
 
-use std::{collections::{HashSet,HashMap}, hint::unreachable_unchecked};
-
 use super::model::Face;
 
 #[derive(Debug)]
 /// A container to hold the state of `wfc` waves.
-pub struct Waves {
+pub struct Waves<'a> {
+    graph: &'a Vec<Vec<(usize, Face)>>,
+    constraints: &'a HashMap<Face, Vec<HashSet<usize>>>,
     collapsed_count: usize,
     rng: ThreadRng,
     entropies: Vec<f32>,
@@ -22,9 +24,14 @@ pub enum WavesError {
     Contradiction,
 }
 
-impl Waves {
+impl<'a> Waves<'a> {
     /// Constructs an uncollapsed `Waves`.
-    pub fn new(wave_count: usize, tile_count: usize) -> Self {
+    pub fn new(
+        graph: &'a Vec<Vec<(usize, Face)>>,
+        constraints: &'a HashMap<Face, Vec<HashSet<usize>>>,
+    ) -> Self {
+        let wave_count = graph.len();
+        let tile_count = constraints[&Face::Left].len();
         let collapsed_count = 0;
         let mut rng = rand::thread_rng();
         let mut entropies = vec![tile_count as f32; wave_count];
@@ -37,6 +44,8 @@ impl Waves {
         }
         let tiles = vec![all_tiles; wave_count];
         return Self {
+            graph: &graph,
+            constraints: &constraints,
             collapsed_count: collapsed_count,
             entropies: entropies,
             tiles: tiles,
@@ -72,13 +81,8 @@ impl Waves {
         self.collapsed_count += 1;
     }
 
-    /// Propogates `constraints` over `graph` starting from `wave`.
-    pub fn propogate(
-        &mut self,
-        constraints: &HashMap<Face, Vec<HashSet<usize>>>,
-        graph: &Vec<Vec<(usize, Face)>>,
-        wave: usize,
-    ) -> Result<(), WavesError> {
+    /// Propogates constraints over graph starting from `wave`.
+    pub fn propogate(&mut self, wave: usize) -> Result<(), WavesError> {
         let mut stack = vec![wave];
         let mut visited = HashSet::new();
         // let mut observed_waves = HashSet::new();
@@ -90,12 +94,12 @@ impl Waves {
             // 2. Stop propogating when we reach an unchanged tile
             // Due to bugs in approach 1, we are going with approach 2 for now
             let mut initial_tile_counts = Vec::new();
-            for (edge_wave, edge_face) in graph[wave].iter() {
+            for (edge_wave, edge_face) in self.graph[wave].iter() {
                 if !visited.contains(edge_wave) && self.entropies[*edge_wave] > 0.0 {
                     initial_tile_counts.push((*edge_wave, self.tiles[*edge_wave].len()));
                     self.constrain(
                         *edge_wave,
-                        constraints,
+                        self.constraints,
                         wave,
                         edge_face,
                     );
