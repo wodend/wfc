@@ -121,7 +121,7 @@ impl Model {
         tile_size: usize,
         vox_paths: &Vec<PathBuf>,
         coordinates: Vec<(usize, usize, usize)>,
-        tiles: Vec<HashSet<usize>>,
+        tiles: &Vec<HashSet<usize>>,
     ) {
         let file = File::create(&self.output_file).expect("Unable to create vox viewer file");
         let mut writer = BufWriter::new(file);

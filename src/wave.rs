@@ -160,7 +160,7 @@ impl<'a> Waves<'a> {
     }
 
     /// Returns the current `tiles` state of all waves
-    pub fn tiles(&self) -> Vec<HashSet<usize>> {
-        return self.tiles.clone();
+    pub fn tiles(&self) -> &Vec<HashSet<usize>> {
+        return &self.tiles;
     }
 }
