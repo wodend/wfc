@@ -22,7 +22,17 @@ struct Config {
 #[derive(Debug, Serialize, Deserialize)]
 struct TileConfig {
     name: String,
-    connectors: HashMap<Face, Connector>,
+    connectors: Connectors,
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash, Clone)]
+struct Connectors {
+    left: Connector,
+    right: Connector,
+    front: Connector,
+    back: Connector,
+    down: Connector,
+    up: Connector,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash, Clone)]
@@ -36,16 +46,6 @@ enum Symmetry {
     Normal,
     Inverse,
     Symmetrical,
-}
-
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
-struct Connectors {
-    left: Connector,
-    right: Connector,
-    front: Connector,
-    back: Connector,
-    down: Connector,
-    up: Connector,
 }
 
 impl Connectors {
@@ -86,6 +86,17 @@ impl Connectors {
             },
         };
     }
+
+    fn get(&self, face: &Face) -> &Connector {
+        return match face {
+            Face::Left => &self.left,
+            Face::Right => &self.right,
+            Face::Front => &self.front,
+            Face::Back => &self.back,
+            Face::Down => &self.down,
+            Face::Up => &self.up,
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -93,7 +104,7 @@ pub struct Tiles {
     size: usize,
     vox_paths: Vec<PathBuf>,
     rotations: Vec<Rotation>,
-    connectors: HashMap<Face, Vec<Connector>>,
+    connectors: Vec<Connectors>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -112,41 +123,11 @@ impl Tiles {
         let config = serde_json::from_str::<Config>(&config_json).unwrap();
         let mut vox_paths = Vec::new();
         let mut rotations = Vec::new();
-        let mut connectors = HashMap::from([
-            (Face::Left, Vec::new()),
-            (Face::Right, Vec::new()),
-            (Face::Front, Vec::new()),
-            (Face::Back, Vec::new()),
-            (Face::Down, Vec::new()),
-            (Face::Up, Vec::new()),
-        ]);
+        let mut connectors = Vec::new();
         for tile_config in config.tile_configs {
             vox_paths.push(sample_dir.join(tile_config.name).with_extension("vox"));
             rotations.push(Rotation::R0);
-            connectors
-                .get_mut(&Face::Left)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Left).unwrap().clone());
-            connectors
-                .get_mut(&Face::Right)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Right).unwrap().clone());
-            connectors
-                .get_mut(&Face::Front)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Front).unwrap().clone());
-            connectors
-                .get_mut(&Face::Back)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Back).unwrap().clone());
-            connectors
-                .get_mut(&Face::Down)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Down).unwrap().clone());
-            connectors
-                .get_mut(&Face::Up)
-                .unwrap()
-                .push(tile_config.connectors.get(&Face::Up).unwrap().clone());
+            connectors.push(tile_config.connectors);
         }
         let tiles = Self {
             size: config.tile_size,
@@ -159,15 +140,10 @@ impl Tiles {
 
     pub fn generate_transformed_tiles(&mut self) {
         let mut generated_count = 0;
-        let mut generated_vox_paths = Vec::new();
-        let mut generated_rotations = Vec::new();
-        let mut generated_connectors = Vec::new();
-        for (tile, vox_path) in self.vox_paths.iter().enumerate() {
-            let config_connectors = self.connectors(tile);
-            let mut previous_connectors = HashSet::new();
-            previous_connectors.insert(config_connectors.clone());
-            let config_vox = Vox::open(vox_path).unwrap();
-            let config_tile_name = vox_path
+        let mut generated = Vec::new();
+        for (vox_path, connectors) in self.vox_paths.iter().zip(&self.connectors) {
+            let vox = Vox::open(vox_path).unwrap();
+            let tile_name = vox_path // TODO: Generate tile name if this fails
                 .file_stem()
                 .unwrap()
                 .to_str()
@@ -175,77 +151,34 @@ impl Tiles {
                 .split("-")
                 .collect::<Vec<&str>>()[2];
             let vox_extension = vox_path.extension().unwrap();
+            let mut visited = HashSet::new();
+            visited.insert(connectors.clone());
             let rotations = [Rotation::R90, Rotation::R180, Rotation::R270];
-            for rotation in rotations {
-                let connectors = config_connectors.rotated(&rotation);
-                if !previous_connectors.contains(&connectors) {
-                    previous_connectors.insert(connectors.clone());
+            for generated_rotation in rotations {
+                let generated_connectors = connectors.rotated(&generated_rotation);
+                if !visited.contains(&generated_connectors) {
+                    visited.insert(generated_connectors.clone());
                     let generated_tile_name = format!(
-                        "generated-{generated_count}-{config_tile_name}_{rotation:?}",
+                        "generated-{generated_count}-{tile_name}_{rotation:?}",
                         generated_count = generated_count,
-                        config_tile_name = config_tile_name,
-                        rotation = rotation,
+                        tile_name = tile_name,
+                        rotation = generated_rotation,
                     );
                     let generated_vox_path = vox_path
                         .with_file_name(generated_tile_name)
                         .with_extension(vox_extension);
-                    let vox = config_vox.rotated(&rotation);
-                    vox.write(&generated_vox_path).unwrap();
+                    let generated_vox = vox.rotated(&generated_rotation);
+                    generated_vox.write(&generated_vox_path).unwrap();
                     generated_count += 1;
-                    generated_vox_paths.push(generated_vox_path);
-                    generated_rotations.push(rotation);
-                    generated_connectors.push(connectors.clone());
+                    generated.push((generated_vox_path, generated_rotation, generated_connectors));
                 }
             }
         }
-        for tile in 0..generated_count {
-            self.add(
-                generated_vox_paths[tile].clone(),
-                generated_rotations[tile].clone(),
-                generated_connectors[tile].clone(),
-            );
+        for (vox_path, rotation, connectors) in generated {
+            self.vox_paths.push(vox_path);
+            self.rotations.push(rotation);
+            self.connectors.push(connectors);
         }
-    }
-
-    /// Returns connectors for a tile
-    fn connectors(&self, tile: usize) -> Connectors {
-        return Connectors {
-            left: self.connectors.get(&Face::Left).unwrap()[tile].clone(),
-            right: self.connectors.get(&Face::Right).unwrap()[tile].clone(),
-            front: self.connectors.get(&Face::Front).unwrap()[tile].clone(),
-            back: self.connectors.get(&Face::Back).unwrap()[tile].clone(),
-            down: self.connectors.get(&Face::Down).unwrap()[tile].clone(),
-            up: self.connectors.get(&Face::Up).unwrap()[tile].clone(),
-        };
-    }
-
-    fn add(&mut self, vox_path: PathBuf, rotation: Rotation, connectors: Connectors) {
-        self.vox_paths.push(vox_path);
-        self.rotations.push(rotation);
-        self.connectors
-            .get_mut(&Face::Left)
-            .unwrap()
-            .push(connectors.left);
-        self.connectors
-            .get_mut(&Face::Right)
-            .unwrap()
-            .push(connectors.right);
-        self.connectors
-            .get_mut(&Face::Front)
-            .unwrap()
-            .push(connectors.front);
-        self.connectors
-            .get_mut(&Face::Back)
-            .unwrap()
-            .push(connectors.back);
-        self.connectors
-            .get_mut(&Face::Down)
-            .unwrap()
-            .push(connectors.down);
-        self.connectors
-            .get_mut(&Face::Up)
-            .unwrap()
-            .push(connectors.up);
     }
 
     pub fn len(&self) -> usize {
@@ -257,21 +190,23 @@ impl Tiles {
         let faces = [Face::Left, Face::Right, Face::Front, Face::Back, Face::Down, Face::Up];
         for face in faces {
             let mut face_constraints = Vec::new();
-            for (constraint_tile, constraint_connector) in self.connectors.get(&face).unwrap().iter().enumerate() {
+            let inverse_face = match face {
+                Face::Left => Face::Right,
+                Face::Right => Face::Left,
+                Face::Front => Face::Back,
+                Face::Back => Face::Front,
+                Face::Down => Face::Up,
+                Face::Up => Face::Down,
+            };
+            for (constraint_rotation, constraint_connectors) in self.rotations.iter().zip(&self.connectors) {
+                let constraint_connector = constraint_connectors.get(&face);
                 let mut valid_tiles = HashSet::new();
-                let inverse_face = match face {
-                    Face::Left => Face::Right,
-                    Face::Right => Face::Left,
-                    Face::Front => Face::Back,
-                    Face::Back => Face::Front,
-                    Face::Down => Face::Up,
-                    Face::Up => Face::Down,
-                };
-                for (tile, connector) in self.connectors.get(&inverse_face).unwrap().iter().enumerate() {
+                for (tile, (rotation, connectors)) in self.rotations.iter().zip(&self.connectors).enumerate() {
+                    let connector = connectors.get(&inverse_face);
                     let id_fits = constraint_connector.id == connector.id;
                     let symmetry_fits = match constraint_connector.symmetry {
                         Symmetry::Normal => if face == Face::Down || face == Face::Up {
-                                connector.symmetry == Symmetry::Normal && self.rotations[constraint_tile] == self.rotations[tile]
+                                connector.symmetry == Symmetry::Normal && constraint_rotation == rotation
                             } else {
                                 connector.symmetry == Symmetry::Inverse
                             },

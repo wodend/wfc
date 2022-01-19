@@ -81,27 +81,48 @@ impl Waves {
     ) -> Result<(), WavesError> {
         let mut stack = vec![wave];
         let mut visited = HashSet::new();
+        // let mut observed_waves = HashSet::new();
         while let Some(wave) = stack.pop() {
             visited.insert(wave);
             // TODO: Spawn a new thread for each face
-            let mut constrain_results = Vec::new();
+            // TODO: Benchmark to determine which of the following optimizations is better:
+            // 1. Observe tiles which only have 1 possible tile after propogation
+            // 2. Stop propogating when we reach an unchanged tile
+            // Due to bugs in approach 1, we are going with approach 2 for now
+            let mut initial_tile_counts = Vec::new();
             for (edge_wave, edge_face) in graph[wave].iter() {
                 if !visited.contains(edge_wave) && self.entropies[*edge_wave] > 0.0 {
-                    constrain_results.push(self.constrain(
+                    initial_tile_counts.push((*edge_wave, self.tiles[*edge_wave].len()));
+                    self.constrain(
                         *edge_wave,
                         constraints,
                         wave,
                         edge_face,
-                    ));
+                    );
                 }
+                // For approach 1, we must always push unvisited edges
+                // if !visited.contains(edge_wave) {
+                //     stack.push(*edge_wave);
+                // }
             }
-            for result in constrain_results {
-                let (edge_wave, removed_tile_counts) = result?;
-                if removed_tile_counts > 0 {
+            for (edge_wave, initial_tile_count) in initial_tile_counts {
+                if self.tiles[edge_wave].is_empty() {
+                    return Err(WavesError::Contradiction);
+                }
+                // if self.tiles[edge_wave].len() == 1 {
+                //     if self.entropies[edge_wave] < 1.0 {
+                //         println!("unreachable");
+                //     }
+                //     observed_waves.insert(edge_wave);
+                // }
+                if self.tiles[edge_wave].len() != initial_tile_count {
                     stack.push(edge_wave);
                 }
             }
         }
+        // for wave in observed_waves.iter() {
+        //     self.collapse(*wave);
+        // }
         return Ok(());
     }
 
@@ -112,7 +133,7 @@ impl Waves {
         constraints: &HashMap<Face, Vec<HashSet<usize>>>,
         wave: usize,
         edge_face: &Face,
-    ) -> Result<(usize, usize), WavesError> {
+    ) {
         let constraints = &constraints[edge_face];
         let mut valid_tiles = HashSet::new();
         for tile in self.tiles[wave].iter() {
@@ -120,28 +141,18 @@ impl Waves {
                 valid_tiles.insert(*valid_tile);
             }
         }
-        let mut removed_tile_count = 0;
         let tiles = self.tiles[edge_wave].clone();
         for tile in tiles.iter() {
             if !valid_tiles.contains(tile) {
                 self.entropies[edge_wave] -= 1.0;
                 self.tiles[edge_wave].remove(tile);
-                removed_tile_count += 1;
             }
         }
-        if self.tiles[edge_wave].is_empty() {
-            return Err(WavesError::Contradiction);
-        }
-        //if self.tiles[edge_wave].len() == 1 {
-        //    //println!("Constrain collapse {:?}", edge_wave);
-        //    self.collapse(edge_wave);
-        //}
-        return Ok((edge_wave, removed_tile_count));
     }
 
     /// Returns true if all waves are collapsed
     pub fn are_collapsed(&self) -> bool {
-        return self.collapsed_count == self.entropies.len();
+        return self.collapsed_count == self.entropies.len(); // TODO: Remove >
     }
 
     /// Returns the current `tiles` state of all waves

@@ -4,27 +4,27 @@
         {
             "name": "config-0-road_strait_low",
             "connectors": {
-                "Left": {
+                "left": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 },
-                "Right": {
+                "right": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 },
-                "Front": {
+                "front": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Back": {
+                "back": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Down": {
+                "down": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Up": {
+                "up": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 }
@@ -33,27 +33,27 @@
         {
             "name": "config-1-road_turn_low",
             "connectors": {
-                "Left": {
+                "left": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Right": {
+                "right": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 },
-                "Front": {
+                "front": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Back": {
+                "back": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 },
-                "Down": {
+                "down": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Up": {
+                "up": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 }
@@ -62,27 +62,27 @@
         {
             "name": "config-2-humus",
             "connectors": {
-                "Left": {
+                "left": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Right": {
+                "right": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Front": {
+                "front": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Back": {
+                "back": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Down": {
+                "down": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Up": {
+                "up": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 }
@@ -91,27 +91,27 @@
         {
             "name": "config-3-soil",
             "connectors": {
-                "Left": {
+                "left": {
                     "id": 2,
                     "symmetry": "Symmetrical"
                 },
-                "Right": {
+                "right": {
                     "id": 2,
                     "symmetry": "Symmetrical"
                 },
-                "Front": {
+                "front": {
                     "id": 2,
                     "symmetry": "Symmetrical"
                 },
-                "Back": {
+                "back": {
                     "id": 2,
                     "symmetry": "Symmetrical"
                 },
-                "Down": {
+                "down": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 },
-                "Up": {
+                "up": {
                     "id": 0,
                     "symmetry": "Symmetrical"
                 }
@@ -120,27 +120,143 @@
         {
             "name": "config-4-sky",
             "connectors": {
-                "Left": {
+                "left": {
                     "id": 3,
                     "symmetry": "Symmetrical"
                 },
-                "Right": {
+                "right": {
                     "id": 3,
                     "symmetry": "Symmetrical"
                 },
-                "Front": {
+                "front": {
                     "id": 3,
                     "symmetry": "Symmetrical"
                 },
-                "Back": {
+                "back": {
                     "id": 3,
                     "symmetry": "Symmetrical"
                 },
-                "Down": {
+                "down": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 },
-                "Up": {
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-5-road_ramp_start",
+            "connectors": {
+                "left": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-6-road_ramp_end",
+            "connectors": {
+                "left": {
+                    "id": 5,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-7-road_straight_high",
+            "connectors": {
+                "left": {
+                    "id": 5,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 5,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-8-road_cross",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 5,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 5,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
                     "id": 1,
                     "symmetry": "Symmetrical"
                 }
