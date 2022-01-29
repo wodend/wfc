@@ -1,0 +1,121 @@
+{
+    "tile_size": 16,
+    "tile_configs": [
+        {
+            "name": "stairs-0-empty",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "stairs-1-path",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 99,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "stairs-2-stairs_0",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 99,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "stairs-3-stairs_1",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        }
+    ] 
+}

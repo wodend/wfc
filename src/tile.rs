@@ -91,7 +91,7 @@ impl Connectors {
             Face::Back => &self.back,
             Face::Down => &self.down,
             Face::Up => &self.up,
-        }
+        };
     }
 }
 
@@ -184,7 +184,14 @@ impl Tiles {
     /// Returns valid tiles for each tile on each face to constrain `wfc`.
     pub fn constraints(&self) -> HashMap<Face, Vec<HashSet<usize>>> {
         let mut constraints = HashMap::new();
-        let faces = [Face::Left, Face::Right, Face::Front, Face::Back, Face::Down, Face::Up];
+        let faces = [
+            Face::Left,
+            Face::Right,
+            Face::Front,
+            Face::Back,
+            Face::Down,
+            Face::Up,
+        ];
         for face in faces {
             let mut face_constraints = Vec::new();
             let inverse_face = match face {
@@ -195,18 +202,25 @@ impl Tiles {
                 Face::Down => Face::Up,
                 Face::Up => Face::Down,
             };
-            for (constraint_rotation, constraint_connectors) in self.rotations.iter().zip(&self.connectors) {
+            for (constraint_rotation, constraint_connectors) in
+                self.rotations.iter().zip(&self.connectors)
+            {
                 let constraint_connector = constraint_connectors.get(&face);
                 let mut valid_tiles = HashSet::new();
-                for (tile, (rotation, connectors)) in self.rotations.iter().zip(&self.connectors).enumerate() {
+                for (tile, (rotation, connectors)) in
+                    self.rotations.iter().zip(&self.connectors).enumerate()
+                {
                     let connector = connectors.get(&inverse_face);
                     let id_fits = constraint_connector.id == connector.id;
                     let symmetry_fits = match constraint_connector.symmetry {
-                        Symmetry::Normal => if face == Face::Down || face == Face::Up {
-                                connector.symmetry == Symmetry::Normal && constraint_rotation == rotation
+                        Symmetry::Normal => {
+                            if face == Face::Down || face == Face::Up {
+                                connector.symmetry == Symmetry::Normal
+                                    && constraint_rotation == rotation
                             } else {
                                 connector.symmetry == Symmetry::Inverse
-                            },
+                            }
+                        }
                         Symmetry::Inverse => connector.symmetry == Symmetry::Normal,
                         Symmetry::Symmetrical => connector.symmetry == Symmetry::Symmetrical,
                     };

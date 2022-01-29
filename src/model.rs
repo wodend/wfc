@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::fs::File;
-use std::path::PathBuf;
 use std::io::{BufWriter, Write};
+use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
@@ -84,27 +84,27 @@ impl Model {
     fn wave_edges(&self, x: usize, y: usize, z: usize) -> Vec<(usize, Face)> {
         let mut edges = Vec::new();
         if x > 0 {
-            let edge_wave = self.edge_wave(x-1, y, z);
+            let edge_wave = self.edge_wave(x - 1, y, z);
             edges.push((edge_wave, Face::Left));
         }
         if x < self.width - 1 {
-            let edge_wave = self.edge_wave(x+1, y, z);
+            let edge_wave = self.edge_wave(x + 1, y, z);
             edges.push((edge_wave, Face::Right));
         }
         if y > 0 {
-            let edge_wave = self.edge_wave(x, y-1, z);
+            let edge_wave = self.edge_wave(x, y - 1, z);
             edges.push((edge_wave, Face::Front));
         }
         if y < self.depth - 1 {
-            let edge_wave = self.edge_wave(x, y+1, z);
+            let edge_wave = self.edge_wave(x, y + 1, z);
             edges.push((edge_wave, Face::Back));
         }
         if z > 0 {
-            let edge_wave = self.edge_wave(x, y, z-1);
+            let edge_wave = self.edge_wave(x, y, z - 1);
             edges.push((edge_wave, Face::Down));
         }
         if z < self.height - 1 {
-            let edge_wave = self.edge_wave(x, y, z+1);
+            let edge_wave = self.edge_wave(x, y, z + 1);
             edges.push((edge_wave, Face::Up));
         }
         return edges;
@@ -125,10 +125,15 @@ impl Model {
     ) {
         let file = File::create(&self.output_file).expect("Unable to create vox viewer file");
         let mut writer = BufWriter::new(file);
-        writer.write("// Generated wfc output\n".as_bytes()).unwrap();
+        writer
+            .write("// Generated wfc output\n".as_bytes())
+            .unwrap();
         let max_dimension_size = std::cmp::max(self.width, std::cmp::max(self.depth, self.height));
-        let mv_import_size =  max_dimension_size * tile_size;
-        let header = format!("mv_import {mv_import_size}\n", mv_import_size=mv_import_size);
+        let mv_import_size = max_dimension_size * tile_size;
+        let header = format!(
+            "mv_import {mv_import_size}\n",
+            mv_import_size = mv_import_size
+        );
         writer.write(header.as_bytes()).unwrap();
         for ((x, y, z), tiles) in coordinates.iter().zip(tiles) {
             let x = x * tile_size;
@@ -138,7 +143,13 @@ impl Model {
                 let path = vox_paths[*tile].clone();
                 let absolute_path = path.canonicalize().unwrap();
                 let absolute_path_str = absolute_path.to_str().unwrap();
-                let tile = format!("{x} {y} {z} {path}\n", x=x, y=y, z=z, path=absolute_path_str);
+                let tile = format!(
+                    "{x} {y} {z} {path}\n",
+                    x = x,
+                    y = y,
+                    z = z,
+                    path = absolute_path_str
+                );
                 writer.write(tile.as_bytes()).unwrap();
             }
         }

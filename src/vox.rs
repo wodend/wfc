@@ -212,7 +212,7 @@ impl Vox {
         }
         return Self {
             version: self.version,
-            x_size: self.x_size, // Assumes tile is square
+            x_size: self.x_size, // Assumes tile is a cube
             y_size: self.y_size,
             z_size: self.z_size,
             voxel_count: self.voxel_count,
@@ -238,7 +238,8 @@ mod tests {
     fn test_rotate_90_z() {
         let vox = Vox::open("tests/samples/concrete/config-1-road_turn_low.vox").unwrap();
         let rotated_vox = vox.rotated(&Rotation::R90);
-        rotated_vox.write("tests/samples/concrete/vox_test-1-road_turn_low_r90.vox")
+        rotated_vox
+            .write("tests/samples/concrete/vox_test-1-road_turn_low_r90.vox")
             .unwrap();
         assert!(true);
     }

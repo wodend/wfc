@@ -1,4 +1,4 @@
-use std::collections::{HashSet,HashMap};
+use std::collections::{HashMap, HashSet};
 
 use rand;
 use rand::rngs::ThreadRng;
@@ -97,12 +97,7 @@ impl<'a> Waves<'a> {
             for (edge_wave, edge_face) in self.graph[wave].iter() {
                 if !visited.contains(edge_wave) && self.entropies[*edge_wave] > 0.0 {
                     initial_tile_counts.push((*edge_wave, self.tiles[*edge_wave].len()));
-                    self.constrain(
-                        *edge_wave,
-                        self.constraints,
-                        wave,
-                        edge_face,
-                    );
+                    self.constrain(*edge_wave, self.constraints, wave, edge_face);
                 }
                 // For approach 1, we must always push unvisited edges
                 // if !visited.contains(edge_wave) {

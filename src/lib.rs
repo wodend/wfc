@@ -20,3 +20,7 @@ pub fn run(sample_dir: &str, width: usize, depth: usize, height: usize, output_f
         }
     }
 }
+
+// Return a vector of vectors of tile voxels vector is a flat array with implicit xyzs
+
+// Return the tile size for the model

@@ -1,0 +1,498 @@
+{
+    "tile_size": 8,
+    "tile_configs": [
+        {
+            "name": "abstract-0-empty",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-1-purple_line",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-2-purple_turn",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-3-purple_turn_down",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-4-purple_turn_up",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-5-purple_line_up",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-12-blue_line",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-13-blue_turn",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-14-blue_turn_down",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-15-blue_turn_up",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-16-blue_line_up",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-6-p_b_line",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-7-p_b_turn",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-8-p_b_turn_down",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-9-p_b_turn_up",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-10-p_b_down",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "abstract-11-p_b_up",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        }
+    ] 
+}

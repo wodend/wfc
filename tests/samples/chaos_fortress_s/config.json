@@ -1,0 +1,150 @@
+{
+    "tile_size": 16,
+    "tile_configs": [
+        {
+            "name": "chaos_fortress_config-0-path_edge",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "chaos_fortress_config-1-path_turn_outer",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Inverse"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "chaos_fortress_config-2-path_turn_inner",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 2,
+                    "symmetry": "Normal"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "chaos_fortress_config-3-path_center",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "chaos_fortress_config-9-empty",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        }
+    ] 
+}

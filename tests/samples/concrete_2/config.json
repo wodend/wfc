@@ -1,0 +1,237 @@
+{
+    "tile_size": 16,
+    "tile_configs": [
+        {
+            "name": "config-0-road_edge_full",
+            "connectors": {
+                "left": {
+                    "id": 1,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-1-road_corner_outer",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 1,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 1,
+                    "symmetry": "Normal"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-2-road_middle",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-3-humus",
+            "connectors": {
+                "left": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-4-soil",
+            "connectors": {
+                "left": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 3,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-5-sky",
+            "connectors": {
+                "left": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 4,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-6-road_corner_inner",
+            "connectors": {
+                "left": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 5,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 5,
+                    "symmetry": "Normal"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-7-road_edge_half",
+            "connectors": {
+                "left": {
+                    "id": 5,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 5,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 2,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 0,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 1,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        }
+    ] 
+}
