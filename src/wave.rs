@@ -19,9 +19,11 @@ pub struct Waves<'a> {
 }
 
 #[derive(Debug)]
-/// A `Waves` error
-pub enum WavesError {
-    Contradiction,
+/// A wfc contradiction at the specified wave
+pub struct Contradiction {
+    pub wave: usize,
+    pub tiles: HashSet<usize>,
+    pub face: Face,
 }
 
 impl<'a> Waves<'a> {
@@ -82,7 +84,7 @@ impl<'a> Waves<'a> {
     }
 
     /// Propogates constraints over graph starting from `wave`.
-    pub fn propogate(&mut self, wave: usize) -> Result<(), WavesError> {
+    pub fn propogate(&mut self, wave: usize) -> Result<(), Contradiction> {
         let mut stack = vec![wave];
         let mut visited = HashSet::new();
         // let mut observed_waves = HashSet::new();
@@ -93,31 +95,50 @@ impl<'a> Waves<'a> {
             // 1. Observe tiles which only have 1 possible tile after propogation
             // 2. Stop propogating when we reach an unchanged tile
             // Due to bugs in approach 1, we are going with approach 2 for now
-            let mut initial_tile_counts = Vec::new();
+            // let mut initial_tile_counts = Vec::new();
             for (edge_wave, edge_face) in self.graph[wave].iter() {
                 if !visited.contains(edge_wave) && self.entropies[*edge_wave] > 0.0 {
-                    initial_tile_counts.push((*edge_wave, self.tiles[*edge_wave].len()));
+                    //initial_tile_counts.push((*edge_wave, self.tiles[*edge_wave].len()));
+                    let initial_tile_count = self.tiles[*edge_wave].len();
                     self.constrain(*edge_wave, self.constraints, wave, edge_face);
+                    if self.tiles[*edge_wave].is_empty() {
+                        return Err(
+                            Contradiction {
+                                wave: wave,
+                                tiles: self.tiles[wave].clone(),
+                                face: edge_face.clone(),
+                            }
+                        );
+                    }
+                    if self.tiles[*edge_wave].len() != initial_tile_count {
+                        stack.push(*edge_wave);
+                    }
                 }
                 // For approach 1, we must always push unvisited edges
                 // if !visited.contains(edge_wave) {
                 //     stack.push(*edge_wave);
                 // }
             }
-            for (edge_wave, initial_tile_count) in initial_tile_counts {
-                if self.tiles[edge_wave].is_empty() {
-                    return Err(WavesError::Contradiction);
-                }
-                // if self.tiles[edge_wave].len() == 1 {
-                //     if self.entropies[edge_wave] < 1.0 {
-                //         println!("unreachable");
-                //     }
-                //     observed_waves.insert(edge_wave);
-                // }
-                if self.tiles[edge_wave].len() != initial_tile_count {
-                    stack.push(edge_wave);
-                }
-            }
+            // for (edge_wave, initial_tile_count) in initial_tile_counts {
+            //     if self.tiles[edge_wave].is_empty() {
+            //         return Err(
+            //             Contradiction {
+            //                 wave: wave,
+            //                 tiles: self.tiles[wave],
+
+            //             }
+            //         );
+            //     }
+            //     // if self.tiles[edge_wave].len() == 1 {
+            //     //     if self.entropies[edge_wave] < 1.0 {
+            //     //         println!("unreachable");
+            //     //     }
+            //     //     observed_waves.insert(edge_wave);
+            //     // }
+            //     if self.tiles[edge_wave].len() != initial_tile_count {
+            //         stack.push(edge_wave);
+            //     }
+            // }
         }
         // for wave in observed_waves.iter() {
         //     self.collapse(*wave);
@@ -141,6 +162,7 @@ impl<'a> Waves<'a> {
             }
         }
         let tiles = self.tiles[edge_wave].clone();
+        println!("{:?}", tiles);
         for tile in tiles.iter() {
             if !valid_tiles.contains(tile) {
                 self.entropies[edge_wave] -= 1.0;
@@ -151,7 +173,7 @@ impl<'a> Waves<'a> {
 
     /// Returns true if all waves are collapsed
     pub fn are_collapsed(&self) -> bool {
-        return self.collapsed_count == self.entropies.len(); // TODO: Remove >
+        return self.collapsed_count == self.entropies.len();
     }
 
     /// Returns the current `tiles` state of all waves

@@ -1,0 +1,29 @@
+        {
+            "name": "config-11-path_stair_0b",
+            "connectors": {
+                "left": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 102,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 111,
+                    "symmetry": "Normal"
+                },
+                "back": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 20,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        }

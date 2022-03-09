@@ -7,9 +7,9 @@ use serde::{Deserialize, Serialize};
 
 use super::tile::Tiles;
 use super::wave::Waves;
-use super::wave::WavesError;
+use super::wave::Contradiction;
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash, Clone)]
 /// A face of a 3D tile.
 pub enum Face {
     Left,
@@ -49,7 +49,52 @@ impl Model {
     }
 
     /// Runs the Wave Function Collapse Algorithm.
-    pub fn wfc(&self) -> Result<(), WavesError> {
+    pub fn debug(&self) -> Result<(), ()> {
+        let mut coordinates = Vec::new();
+        let mut wave_graph = Vec::new();
+        for z in 0..self.height {
+            for y in 0..self.depth {
+                for x in 0..self.width {
+                    coordinates.push((x, y, z));
+                    wave_graph.push(self.wave_edges(x, y, z));
+                }
+            }
+        }
+        let mut tiles = Tiles::from(&self.sample_dir).unwrap();
+        tiles.generate_transformed_tiles();
+        let constraints = tiles.constraints();
+        let mut waves = Waves::new(&wave_graph, &constraints);
+
+        while !waves.are_collapsed() {
+            //println!("\n\nIteration {}", i);
+            //println!("Waves {:?}", waves);
+            let wave = waves.min_entropy_wave();
+            //println!("Min entropy wave {:?}", wave);
+            waves.observe(wave);
+            //println!("Observe {:?}", waves);
+            match waves.propogate(wave) {
+                Ok(_) => (),
+                Err(c) => {
+                    let vox_paths = tiles.vox_paths();
+                    println!("Contradiction!");
+                    let coords = coordinates[c.wave];
+                    println!("Cannot propogate contraints from x={} y={} z={}", coords.0, coords.1, coords.2);
+                    println!("Given tiles:");
+                    for tile in c.tiles {
+                        println!("{:?}", vox_paths[tile]);
+                    }
+                    println!("On face {:?}", c.face);
+                    return Err(());
+                },
+            };
+        }
+        //println!("\n\nFinal {:?}", waves);
+        self.render(tiles.size(), tiles.vox_paths(), coordinates, waves.tiles());
+        return Ok(());
+    }
+
+    /// Runs the Wave Function Collapse Algorithm.
+    pub fn wfc(&self) -> Result<(), Contradiction> {
         let mut coordinates = Vec::new();
         let mut wave_graph = Vec::new();
         for z in 0..self.height {

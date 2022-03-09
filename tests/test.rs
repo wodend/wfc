@@ -12,11 +12,11 @@ fn test_concrete() {
 #[test]
 fn test_concrete_2() {
     let sample_dir = "tests/samples/concrete_2";
-    let width = 32;
-    let depth = 32;
-    let height = 5;
+    let width = 16;
+    let depth = 16;
+    let height = 16; //16;
     let output_file = "tests/output/concrete_2.txt";
-    wfc::run(sample_dir, width, depth, height, output_file);
+    wfc::debug(sample_dir, width, depth, height, output_file);
     assert!(true);
 }
 

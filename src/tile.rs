@@ -32,8 +32,23 @@ struct Connectors {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash, Clone)]
 struct Connector {
-    id: usize,
+    id: i64,
     symmetry: Symmetry,
+}
+
+impl Connector {
+    fn inverse(&self) -> Self {
+        let id = self.id;
+        let symmetry = match self.symmetry{
+            Symmetry::Symmetrical => Symmetry::Symmetrical,
+            Symmetry::Normal => Symmetry::Inverse,
+            Symmetry::Inverse => Symmetry::Normal,
+        };
+        return Self {
+            id: id,
+            symmetry: symmetry,
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Hash, Clone)]
@@ -82,6 +97,28 @@ impl Connectors {
         };
     }
 
+    /// Returns a new `Connectors` rotated `rotation` degrees about the z axis
+    fn reflected(&self, axis: &Axis) -> Self {
+        return match axis {
+            Axis::X => Self {
+                left: self.right.clone().inverse(),
+                right: self.left.clone().inverse(),
+                front: self.front.clone().inverse(),
+                back: self.back.clone().inverse(),
+                down: self.down.clone(),
+                up: self.up.clone(),
+            },
+            Axis::Y => Self {
+                left: self.left.clone().inverse(),
+                right: self.right.clone().inverse(),
+                front: self.back.clone().inverse(),
+                back: self.front.clone().inverse(),
+                down: self.down.clone(),
+                up: self.up.clone(),
+            },
+        };
+    }
+
     /// Returns a reference to the `Connector` for `face`.
     fn get(&self, face: &Face) -> &Connector {
         return match face {
@@ -111,6 +148,13 @@ pub enum Rotation {
     R90,
     R180,
     R270,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+/// A 3D axis for specifying a reflection.
+pub enum Axis {
+    X,
+    Y,
 }
 
 impl Tiles {
@@ -173,7 +217,28 @@ impl Tiles {
                     generated.push((generated_vox_path, generated_rotation, generated_connectors));
                 }
             }
+            let axes = [Axis::X, Axis::Y];
+            for generated_axis in axes {
+                let generated_connectors = connectors.reflected(&generated_axis);
+                if !visited.contains(&generated_connectors) {
+                    visited.insert(generated_connectors.clone());
+                    let generated_tile_name = format!(
+                        "generated-{generated_count}-{tile_name}_f{axis:?}",
+                        generated_count = generated_count,
+                        tile_name = tile_name,
+                        axis = generated_axis,
+                    );
+                    let generated_vox_path = vox_path
+                        .with_file_name(generated_tile_name)
+                        .with_extension(vox_extension);
+                    let generated_vox = vox.reflected(&generated_axis);
+                    generated_vox.write(&generated_vox_path).unwrap();
+                    generated_count += 1;
+                    generated.push((generated_vox_path, Rotation::R0, generated_connectors));
+                }
+            }
         }
+
         for (vox_path, rotation, connectors) in generated {
             self.vox_paths.push(vox_path);
             self.rotations.push(rotation);
@@ -231,6 +296,13 @@ impl Tiles {
                 face_constraints.push(valid_tiles);
             }
             constraints.insert(face, face_constraints);
+        }
+        let cs = constraints.get(&Face::Down).unwrap();
+        for (tile, valid_tiles) in cs.iter().enumerate() {
+            println!("---\n{:?}:", self.vox_paths[tile]);
+            for tile in valid_tiles.iter() {
+                println!("{:?}", self.vox_paths[*tile]);
+            }
         }
         return constraints;
     }

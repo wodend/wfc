@@ -21,6 +21,11 @@ pub fn run(sample_dir: &str, width: usize, depth: usize, height: usize, output_f
     }
 }
 
+pub fn debug(sample_dir: &str, width: usize, depth: usize, height: usize, output_file: &str) {
+    let model = Model::new(sample_dir, width, depth, height, output_file);
+    let wfc = model.debug();
+}
+
 // Return a vector of vectors of tile voxels vector is a flat array with implicit xyzs
 
 // Return the tile size for the model

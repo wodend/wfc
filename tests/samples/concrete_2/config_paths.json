@@ -1,0 +1,117 @@
+
+        {
+            "name": "config-3-path",
+            "connectors": {
+                "left": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 20,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-4-path_edge",
+            "connectors": {
+                "left": {
+                    "id": 102,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 102,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 21,
+                    "symmetry": "Normal"
+                }
+            }
+        },
+        {
+            "name": "config-5-path_turn_inner",
+            "connectors": {
+                "left": {
+                    "id": 102,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 101,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 102,
+                    "symmetry": "Inverse"
+                },
+                "down": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 22,
+                    "symmetry": "Normal"
+                }
+            }
+        },
+        {
+            "name": "config-6-path_turn_outer",
+            "connectors": {
+                "left": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 102,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 102,
+                    "symmetry": "Normal"
+                },
+                "back": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 23,
+                    "symmetry": "Normal"
+                }
+            }
+        }

@@ -1,0 +1,87 @@
+        {
+            "name": "config-1-soil",
+            "connectors": {
+                "left": {
+                    "id": -100,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": -100,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": -100,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": -100,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": -10,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-2-bedrock",
+            "connectors": {
+                "left": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": -20,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": -20,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-2-bedrock",
+            "connectors": {
+                "left": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": -200,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": -20,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": -10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },

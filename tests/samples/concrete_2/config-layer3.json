@@ -1,6 +1,91 @@
-{
-    "tile_size": 16,
-    "tile_configs": [
+
+        {
+            "name": "config-0-sky",
+            "connectors": {
+                "left": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 20,
+                    "symmetry": "Symmetrical"
+                },
+                "up": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-0-sky",
+            "connectors": {
+                "left": {
+                    "id": 202,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 202,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 100,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 21,
+                    "symmetry": "Normal"
+                },
+                "up": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
+        {
+            "name": "config-0-sky",
+            "connectors": {
+                "left": {
+                    "id": 202,
+                    "symmetry": "Normal"
+                },
+                "right": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "front": {
+                    "id": 201,
+                    "symmetry": "Symmetrical"
+                },
+                "back": {
+                    "id": 202,
+                    "symmetry": "Inverse"
+                },
+                "down": {
+                    "id": 22,
+                    "symmetry": "Normal"
+                },
+                "up": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
         {
             "name": "config-0-sky",
             "connectors": {
@@ -9,20 +94,20 @@
                     "symmetry": "Symmetrical"
                 },
                 "right": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
+                    "id": 202,
+                    "symmetry": "Inverse"
                 },
                 "front": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
+                    "id": 202,
+                    "symmetry": "Normal"
                 },
                 "back": {
                     "id": 100,
                     "symmetry": "Symmetrical"
                 },
                 "down": {
-                    "id": 10,
-                    "symmetry": "Symmetrical"
+                    "id": 23,
+                    "symmetry": "Normal"
                 },
                 "up": {
                     "id": 10,
@@ -30,81 +115,24 @@
                 }
             }
         },
+
         {
-            "name": "config-3-path",
+            "name": "config-0-sky",
             "connectors": {
                 "left": {
-                    "id": 101,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "right": {
-                    "id": 101,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "front": {
-                    "id": 101,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "back": {
-                    "id": 101,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 10,
-                    "symmetry": "Symmetrical"
-                },
-                "up": {
-                    "id": 20,
-                    "symmetry": "Symmetrical"
-                }
-            }
-        },
-        {
-            "name": "config-19-debug_0",
-            "connectors": {
-                "left": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "front": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 20,
-                    "symmetry": "Symmetrical"
-                },
-                "up": {
-                    "id": 30,
-                    "symmetry": "Symmetrical"
-                }
-            }
-        },
-        {
-            "name": "config-19-debug_0",
-            "connectors": {
-                "left": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "front": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 201,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "down": {
@@ -118,76 +146,18 @@
             }
         },
         {
-            "name": "config-4-path_edge",
+            "name": "config-0-sky",
             "connectors": {
                 "left": {
-                    "id": 102,
+                    "id": 302,
                     "symmetry": "Normal"
                 },
                 "right": {
-                    "id": 102,
+                    "id": 302,
                     "symmetry": "Inverse"
                 },
                 "front": {
-                    "id": 101,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 10,
-                    "symmetry": "Symmetrical"
-                },
-                "up": {
-                    "id": 21,
-                    "symmetry": "Normal"
-                }
-            }
-        },
-        {
-            "name": "config-16-debug_1",
-            "connectors": {
-                "left": {
-                    "id": 202,
-                    "symmetry": "Normal"
-                },
-                "right": {
-                    "id": 202,
-                    "symmetry": "Inverse"
-                },
-                "front": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 21,
-                    "symmetry": "Normal"
-                },
-                "up": {
-                    "id": 31,
-                    "symmetry": "Normal"
-                }
-            }
-        },
-        {
-            "name": "config-16-debug_1",
-            "connectors": {
-                "left": {
-                    "id": 202,
-                    "symmetry": "Normal"
-                },
-                "right": {
-                    "id": 202,
-                    "symmetry": "Inverse"
-                },
-                "front": {
-                    "id": 201,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "back": {
@@ -205,80 +175,51 @@
             }
         },
         {
-            "name": "config-5-path_turn_inner",
+            "name": "config-0-sky",
             "connectors": {
                 "left": {
-                    "id": 102,
+                    "id": 302,
                     "symmetry": "Normal"
                 },
                 "right": {
-                    "id": 101,
-                    "symmetry": "Symmetrical"
+                    "id": 302,
+                    "symmetry": "Inverse"
                 },
                 "front": {
-                    "id": 101,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "back": {
-                    "id": 102,
-                    "symmetry": "Inverse"
+                    "id": 200,
+                    "symmetry": "Symmetrical"
                 },
                 "down": {
+                    "id": 31,
+                    "symmetry": "Normal"
+                },
+                "up": {
                     "id": 10,
                     "symmetry": "Symmetrical"
-                },
-                "up": {
-                    "id": 22,
-                    "symmetry": "Normal"
                 }
             }
         },
         {
-            "name": "config-17-debug_2",
+            "name": "config-0-sky",
             "connectors": {
                 "left": {
-                    "id": 202,
+                    "id": 302,
                     "symmetry": "Normal"
                 },
                 "right": {
-                    "id": 201,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "front": {
-                    "id": 201,
+                    "id": 301,
                     "symmetry": "Symmetrical"
                 },
                 "back": {
-                    "id": 202,
-                    "symmetry": "Inverse"
-                },
-                "down": {
-                    "id": 22,
-                    "symmetry": "Normal"
-                },
-                "up": {
-                    "id": 32,
-                    "symmetry": "Normal"
-                }
-            }
-        },
-        {
-            "name": "config-17-debug_2",
-            "connectors": {
-                "left": {
-                    "id": 202,
-                    "symmetry": "Normal"
-                },
-                "right": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "front": {
-                    "id": 201,
-                    "symmetry": "Symmetrical"
-                },
-                "back": {
-                    "id": 202,
+                    "id": 302,
                     "symmetry": "Inverse"
                 },
                 "down": {
@@ -292,76 +233,18 @@
             }
         },
         {
-            "name": "config-6-path_turn_outer",
+            "name": "config-0-sky",
             "connectors": {
                 "left": {
                     "id": 100,
                     "symmetry": "Symmetrical"
                 },
                 "right": {
-                    "id": 102,
+                    "id": 302,
                     "symmetry": "Inverse"
                 },
                 "front": {
-                    "id": 102,
-                    "symmetry": "Normal"
-                },
-                "back": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 10,
-                    "symmetry": "Symmetrical"
-                },
-                "up": {
-                    "id": 23,
-                    "symmetry": "Normal"
-                }
-            }
-        },
-        {
-            "name": "config-18-debug_3",
-            "connectors": {
-                "left": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 202,
-                    "symmetry": "Inverse"
-                },
-                "front": {
-                    "id": 202,
-                    "symmetry": "Normal"
-                },
-                "back": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "down": {
-                    "id": 23,
-                    "symmetry": "Normal"
-                },
-                "up": {
-                    "id": 33,
-                    "symmetry": "Normal"
-                }
-            }
-        },
-        {
-            "name": "config-18-debug_3",
-            "connectors": {
-                "left": {
-                    "id": 100,
-                    "symmetry": "Symmetrical"
-                },
-                "right": {
-                    "id": 202,
-                    "symmetry": "Inverse"
-                },
-                "front": {
-                    "id": 202,
+                    "id": 302,
                     "symmetry": "Normal"
                 },
                 "back": {
@@ -377,6 +260,33 @@
                     "symmetry": "Symmetrical"
                 }
             }
-        }
-    ] 
-}
+        },
+        {
+            "name": "config-0-sky",
+            "connectors": {
+                "left": {
+                    "id": 200,
+                    "symmetry": "Symmetrical"
+                },
+                "right": {
+                    "id": 302,
+                    "symmetry": "Inverse"
+                },
+                "front": {
+                    "id": 302,
+                    "symmetry": "Normal"
+                },
+                "back": {
+                    "id": 200,
+                    "symmetry": "Symmetrical"
+                },
+                "down": {
+                    "id": 33,
+                    "symmetry": "Normal"
+                },
+                "up": {
+                    "id": 10,
+                    "symmetry": "Symmetrical"
+                }
+            }
+        },
